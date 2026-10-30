@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Карта островов</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ruslan+Display&family=Marck+Script&family=Manrope:wght@500;700;800&display=swap"><style>
+:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--gold:#f0c14f;--ink:#3a2412;--red:#a3231f;--head:"Ruslan Display","Playfair Display",Georgia,serif;--serif:"Marck Script","Segoe Script","Brush Script MT",cursive;--sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;font-family:var(--sans);color:#fbeec9;background:linear-gradient(#00000030,transparent 30%,#00000040),repeating-linear-gradient(90deg,#6a4426 0 92px,#583720 92px 94px)}
+.wrap{max-width:520px;margin:0 auto;padding:22px 16px 56px}
+.skulls{text-align:center;font-size:18px;letter-spacing:10px;opacity:.8;margin-bottom:4px}
+.chap{font:800 12px var(--sans);letter-spacing:5px;color:var(--gold);text-align:center}
+h1{margin:8px 0 12px;text-align:center;font:400 38px/1.05 var(--head);color:#fff1c6;text-shadow:0 3px 0 #3a2412}
+.story{font:400 21px/1.35 var(--serif);text-align:center;color:#fbeec9;margin:0 0 20px;text-shadow:0 2px 2px #3a241288}
+.card{position:relative;color:var(--ink);background:linear-gradient(#fbf1d2,#f2e0b0);border:2px solid #8a5a2b;border-radius:10px;padding:16px;margin-bottom:16px;box-shadow:0 8px 18px #2a160a88,inset 0 0 0 3px #fff6dc}
+.card h3{margin:0 0 8px;font:400 25px var(--head);color:var(--red)}
+input[type=text],input[type=number],textarea{width:100%;padding:13px 14px;border-radius:8px;border:2px solid #8a5a2b;background:#fffaea;color:var(--ink);font:700 17px var(--sans);margin-bottom:10px}
+.btn{display:block;width:100%;padding:14px;border:2px solid #7a4f14;border-radius:10px;font:800 16px var(--sans);letter-spacing:.5px;color:#2a1608;cursor:pointer;background:linear-gradient(#ffe69a,#f0bb4a 55%,#c98a25);box-shadow:0 4px 0 #7a4f14,0 10px 16px #2a160a77,inset 0 1px 0 #fffa}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #7a4f14}
+.btn.ghost{background:linear-gradient(#7d5230,#5e3a1e);color:#fff1c6;border-color:#3a2412;margin-top:8px;box-shadow:0 3px 0 #2a160a,0 8px 12px #2a160a77}
+.opt{display:block;width:100%;text-align:left;padding:13px 14px;margin-bottom:9px;border-radius:8px;border:2px solid #a07442;background:#fffaea;color:var(--ink);font:700 16px var(--sans);cursor:pointer;box-shadow:0 3px 0 #a0744255}
+.opt:active{background:#f6dd9a}
+.msg{min-height:22px;text-align:center;font:700 15px var(--sans);margin:6px 0 4px;color:#fbeec9}
+.card .msg{color:var(--red)}
+.codebox{display:none;text-align:center;border-radius:26px 30px 24px 32px;padding:18px 16px;margin-top:12px;color:#fff;background:radial-gradient(circle at 35% 28%,#e0554e,#a32424 58%,#640f0f);border:3px solid #4d0b0b;box-shadow:0 0 0 5px #a3231f55,0 12px 24px #2a160a99}
+.codebox.show{display:block}
+.cl{font:800 11px var(--sans);letter-spacing:4px;color:#ffe2b0}
+.cv{font:400 40px var(--head);letter-spacing:4px;margin:8px 0;color:#fff;text-shadow:0 3px 0 #4d0b0b}
+.cs{font-size:14px;opacity:.95;margin-bottom:12px}
+.codebox .btn{border-color:#4d0b0b}
+.err{text-align:center;font-size:13px;opacity:.75;margin-top:12px}
+.shake{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.mono{font:700 22px/1.9 ui-monospace,Menlo,Consolas,monospace;letter-spacing:3px;text-align:center;word-break:break-word;color:#2a1608}
+.scroll-x{overflow-x:auto;padding-bottom:6px}
+.tbl{display:grid;grid-auto-flow:column;grid-template-rows:auto auto;gap:3px;width:max-content}
+.tbl span{width:26px;text-align:center;font:700 15px var(--sans);padding:3px 0;border-radius:4px;background:#ead6a2}
+.tbl span.b{background:#8a5a2b;color:#fff1c6}
+.small{font-size:13px;opacity:.85;margin:0 0 8px}
+
+#mapwrap{position:relative;border-radius:12px;overflow:hidden;border:5px solid #6a4426;box-shadow:0 10px 24px #2a160a99,inset 0 0 0 2px #f0c14f;margin-bottom:16px;background:#f4e4b8}
+#map{display:block;width:100%;height:auto;touch-action:manipulation}
+#flash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:100px;background:#fff6c8;opacity:0;pointer-events:none}
+#flash.on{animation:fl .7s}@keyframes fl{0%{opacity:0}20%{opacity:.9}100%{opacity:0}}
+#mapwrap.storm #map{animation:sh .5s}
+.isl{cursor:pointer}
+.ring{animation:ring 1.4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes ring{0%{transform:scale(.85);opacity:1}100%{transform:scale(1.4);opacity:0}}
+.wv{animation:wv 4s ease-in-out infinite alternate}@keyframes wv{to{transform:translateX(5px)}}
+.pop{animation:pp .5s cubic-bezier(.2,1.6,.4,1)}@keyframes pp{from{transform:scale(0)}}
+</style></head><body><div class="wrap"><div class="skulls">☠ ⚓ ☠</div><div class="chap">ГЛАВА 3</div><h1>Карта островов</h1><p class="story">На карте шесть островов. На каждом страж задаёт вопрос, и только знатоки доплывут до конца.</p><div id="mapwrap"><svg id="map" viewBox="0 0 360 540"></svg><div id="flash">⚡</div></div><div class="card" id="panel"></div><div class="codebox" id="codebox"></div><div class="err" id="err">Ошибок: 0</div></div><script>
+const $=id=>document.getElementById(id);
+let err=0;
+function mistake(){err++;$("err").textContent="Ошибок: "+err}
+function shake(el){el.classList.remove("shake");void el.offsetWidth;el.classList.add("shake")}
+function norm(s){return String(s).toUpperCase().replace(/Ё/g,"Е").replace(/[^А-ЯA-Z0-9]/g,"")}
+function finish(base){const c=base+(err===0?"!":"");const b=$("codebox");
+ b.innerHTML='<div class="cl">🗝️ СЛОВО-ПОДСКАЗКА</div><div class="cv">'+c+'</div><div class="cs">'+(err===0?"Идеально: без ошибок ✨ Впиши это слово боту в чат.":"Впиши это слово боту в чат.")+'</div><button class="btn" id="cp">Скопировать код</button>';
+ b.classList.add("show");$("cp").onclick=()=>{try{navigator.clipboard.writeText(c);$("cp").textContent="Скопировано ✓"}catch(e){}};
+ setTimeout(()=>b.scrollIntoView({behavior:"smooth",block:"center"}),150)}
+
+/* ===== НАСТРОЙКИ: вопросы по играм. Первый вариант в каждом списке — правильный (при показе они перемешиваются) ===== */
+const Q=[
+ {name:"Бухта Новичков",ico:"🌴",q:"Minecraft: какой моб гарантированно роняет Тотем бессмертия?",o:["Вызыватель (эвокер)","Разоритель","Ведьма","Пиглин-брут"]},
+ {name:"Пик Ветров",ico:"⛰️",q:"Sea of Thieves: какая торговая компания платит за черепа скелетов-капитанов?",o:["Орден Душ (Order of Souls)","Золотые накопители (Gold Hoarders)","Торговый альянс (Merchant Alliance)","Фортуна Афины (Athena’s Fortune)"]},
+ {name:"Форт Забытых",ico:"🏰",q:"Genshin Impact: какой идеал у нации Натлан и её Архонта?",o:["Война","Любовь","Справедливость","Вечность"]},
+ {name:"Остров Черепа",ico:"☠️",q:"Minecraft: сколько блоков нужно для пирамиды маяка максимального уровня (4 яруса)?",o:["164","140","120","200"]},
+ {name:"Вулкан Ярости",ico:"🌋",q:"Sea of Thieves: как называется высшая ступень репутации у пирата?",o:["Легенда пиратов","Король пиратов","Адмирал морей","Капитан-легенда"]},
+ {name:"Сокровищница",ico:"💰",q:"Genshin Impact: каким по счёту Предвестником Фатуи был Тарталья?",o:["Одиннадцатым","Седьмым","Пятым","Первым"]}
+];
+/* ====================================================================================================== */
+const NS="http://www.w3.org/2000/svg",svg=$("map"),wrap=$("mapwrap");
+const PORT=[58,488],IS=[[112,402],[252,350],[96,282],[248,214],[108,132],[250,64]],PTS=[PORT].concat(IS);
+let cur=0,busy=false,asking=false,shipAt=PORT.slice();
+function rnd(seed){let s=seed*9301+49297;return()=>{s=(s*9301+49297)%233280;return s/233280}}
+function blob(cx,cy,r,seed){const R=rnd(seed),n=9,p=[];for(let i=0;i<n;i++){const a=i/n*6.283,rr=r*(.82+R()*.36);p.push([cx+Math.cos(a)*rr*1.2,cy+Math.sin(a)*rr*.82])}
+ let d="";for(let i=0;i<n;i++){const a=p[i],b=p[(i+1)%n],m=[(a[0]+b[0])/2,(a[1]+b[1])/2];if(i===0){const l=p[n-1];d+=`M${(l[0]+a[0])/2},${(l[1]+a[1])/2}`}d+=`Q${a[0]},${a[1]} ${m[0]},${m[1]}`}return d+"Z"}
+function leg(k){const a=PTS[k],b=PTS[k+1],ym=(a[1]+b[1])/2;return `M${a[0]},${a[1]} C${a[0]},${ym} ${b[0]},${ym} ${b[0]},${b[1]}`}
+function sh(s){const R=rnd(s);let o="";for(let i=0;i<34;i++){const x=15+R()*320,y=18+R()*505;o+=`<path class="wv" style="animation-delay:${(R()*3).toFixed(1)}s" d="M${x.toFixed(0)},${y.toFixed(0)} q5,-6 10,0 t10,0" fill="none" stroke="#c8a468" stroke-width="1.6" stroke-linecap="round"/>`}return o}
+function drawMap(){let o=`<defs><radialGradient id="pg" cx="50%" cy="45%" r="75%"><stop offset="0" stop-color="#fbf0cc"/><stop offset="1" stop-color="#ecd49a"/></radialGradient></defs><rect width="360" height="540" fill="url(#pg)"/><rect x="8" y="8" width="344" height="524" rx="6" fill="none" stroke="#8a5a2b" stroke-width="2"/><rect x="13" y="13" width="334" height="514" rx="4" fill="none" stroke="#8a5a2b" stroke-width="1" stroke-dasharray="2 4"/>`;
+ o+=sh(5);
+ o+=`<text x="180" y="40" text-anchor="middle" font-size="15" font-weight="800" letter-spacing="3" fill="#6a4426">КАРТА КАПИТАНА 22</text>`;
+ for(let k=0;k<6;k++)o+=`<path d="${leg(k)}" fill="none" stroke="#a3231f" stroke-opacity=".55" stroke-width="2.4" stroke-dasharray="2 7" stroke-linecap="round"/>`;
+ o+=`<g id="trails"></g>`;
+ // компас и декор
+ o+=`<g transform="translate(300,478)"><circle r="30" fill="#fbf0cc88" stroke="#8a5a2b" stroke-width="1.5"/><polygon points="0,-28 6,0 0,28 -6,0" fill="#a3231f"/><polygon points="-28,0 0,-6 28,0 0,6" fill="#8a5a2b"/><circle r="4" fill="#6a4426"/><text y="-33" text-anchor="middle" font-size="12" font-weight="800" fill="#6a4426">С</text></g>`;
+ o+=`<text x="26" y="330" font-size="28">🐙</text><text x="296" y="410" font-size="22" opacity=".9">🦑</text>`;
+ o+=`<g transform="translate(${PORT[0]},${PORT[1]})"><text y="6" text-anchor="middle" font-size="26">⚓</text><text y="26" text-anchor="middle" font-size="10" font-weight="800" fill="#6a4426">ПОРТ</text></g>`;
+ IS.forEach((p,i)=>{const[x,y]=p,done=i<cur,now=i===cur&&!asking||i===cur,lock=i>cur;
+  o+=`<g class="isl" data-i="${i}" opacity="${lock?.72:1}">`;
+  if(i===cur)o+=`<ellipse class="ring" cx="${x}" cy="${y}" rx="40" ry="30" fill="none" stroke="#a3231f" stroke-width="3"/>`;
+  o+=`<path d="${blob(x,y+5,28,i+3)}" fill="#c9a259"/><path d="${blob(x,y,28,i+3)}" fill="#efd592" stroke="#8a5a2b" stroke-width="1.5"/><path d="${blob(x,y-2,17,i+9)}" fill="${done?"#6f9a3c":"#8db356"}" stroke="#5f8a3a" stroke-width="1"/>`;
+  o+=`<text x="${x}" y="${y+9}" text-anchor="middle" font-size="26">${Q[i].ico}</text>`;
+  o+=`<circle cx="${x-24}" cy="${y-18}" r="9" fill="#6a4426"/><text x="${x-24}" y="${y-14}" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">${i+1}</text>`;
+  if(done)o+=`<text class="pop" x="${x+14}" y="${y-14}" font-size="20" style="transform-box:fill-box;transform-origin:center">🚩</text>`;
+  o+=`<text x="${x}" y="${y+40}" text-anchor="middle" font-size="10" font-weight="800" fill="#4a2c14" stroke="#f6e7bd" stroke-width="3" paint-order="stroke">${lock?"🔒 ":""}${Q[i].name}</text></g>`});
+ o+=`<text id="ship" font-size="28" text-anchor="middle" x="0" y="0" transform="translate(${shipAt[0]},${shipAt[1]-8})">⛵</text>`;
+ svg.innerHTML=o;
+ svg.querySelectorAll(".isl").forEach(g=>g.onclick=()=>tap(+g.dataset.i))}
+function say(h){$("panel").innerHTML=h}
+function hint(m){say(`<h3>⛵ Плавание</h3><p style="margin:0;line-height:1.5;font-weight:700">${m}</p>`)}
+function trails(upTo){let o="";for(let k=0;k<upTo;k++)o+=`<path d="${leg(k)}" fill="none" stroke="#a3231f" stroke-width="3.2" stroke-linecap="round"/>`;document.getElementById("trails").innerHTML=o}
+function tap(i){if(busy)return;
+ if(i<cur){hint("Этот остров уже пройден. Плыви к мигающему красным.");return}
+ if(i>cur){hint("Сначала доплыви до острова №"+(cur+1)+": он мигает красным.");shake(wrap);return}
+ if(asking){ask();return}
+ sail(cur)}
+function sail(k){busy=true;hint("Курс на остров «"+Q[k].name+"». Держись за штурвал!");
+ const lp=document.createElementNS(NS,"path");lp.setAttribute("d",leg(k));lp.setAttribute("fill","none");lp.setAttribute("stroke","#a3231f");lp.setAttribute("stroke-width","3.2");lp.setAttribute("stroke-linecap","round");
+ const len=lp.getTotalLength();lp.setAttribute("stroke-dasharray",len);lp.setAttribute("stroke-dashoffset",len);document.getElementById("trails").appendChild(lp);
+ const ship=document.getElementById("ship"),t0=performance.now(),D=1700;
+ (function f(now){let t=Math.min(1,(now-t0)/D);const e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,p=lp.getPointAtLength(len*e);
+  ship.setAttribute("transform",`translate(${p.x},${p.y-8+Math.sin(now/160)*2}) rotate(${Math.sin(now/220)*4})`);lp.setAttribute("stroke-dashoffset",len*(1-e));
+  if(t<1)requestAnimationFrame(f);else{shipAt=PTS[k+1].slice();busy=false;asking=true;ask()}})(t0)}
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function ask(){const it=Q[cur];say(`<h3>${it.ico} ${it.name}</h3><div style="font:700 18px/1.4 var(--sans);margin-bottom:12px">${it.q}</div><div id="opts"></div><div class="msg" id="msg">Страж ждёт ответа.</div>`);
+ shuf(it.o).forEach(o=>{const b=document.createElement("button");b.className="opt";b.textContent=o;b.onclick=()=>answer(o===it.o[0]);$("opts").appendChild(b)});
+ $("panel").scrollIntoView({behavior:"smooth",block:"nearest"})}
+function answer(ok){if(ok){asking=false;const last=cur===Q.length-1;cur++;drawMap();
+  if(last){say(`<h3>💰 Сокровищница найдена!</h3><p style="margin:0;font-weight:700;line-height:1.5">Ты прошёл все острова. Компас указывает путь назад в порт.</p>`);finish("КОМПАС")}
+  else hint("Верно! Флаг водружён 🚩. Теперь плыви к следующему острову: он мигает красным.")}
+ else{mistake();wrap.classList.add("storm");$("flash").classList.add("on");setTimeout(()=>{wrap.classList.remove("storm");$("flash").classList.remove("on")},700);$("msg").textContent="⚡ Шторм! Волны бьют по палубе. Попробуй ещё раз."}}
+drawMap();trails(0);hint("Нажми на остров, который мигает красным, и корабль отправится в плавание ⛵");
+</script></body></html>

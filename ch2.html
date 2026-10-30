@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Призрак капитана</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ruslan+Display&family=Marck+Script&family=Manrope:wght@500;700;800&display=swap"><style>
+:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--gold:#f0c14f;--ink:#3a2412;--red:#a3231f;--head:"Ruslan Display","Playfair Display",Georgia,serif;--serif:"Marck Script","Segoe Script","Brush Script MT",cursive;--sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;font-family:var(--sans);color:#fbeec9;background:linear-gradient(#00000030,transparent 30%,#00000040),repeating-linear-gradient(90deg,#6a4426 0 92px,#583720 92px 94px)}
+.wrap{max-width:520px;margin:0 auto;padding:22px 16px 56px}
+.skulls{text-align:center;font-size:18px;letter-spacing:10px;opacity:.8;margin-bottom:4px}
+.chap{font:800 12px var(--sans);letter-spacing:5px;color:var(--gold);text-align:center}
+h1{margin:8px 0 12px;text-align:center;font:400 38px/1.05 var(--head);color:#fff1c6;text-shadow:0 3px 0 #3a2412}
+.story{font:400 21px/1.35 var(--serif);text-align:center;color:#fbeec9;margin:0 0 20px;text-shadow:0 2px 2px #3a241288}
+.card{position:relative;color:var(--ink);background:linear-gradient(#fbf1d2,#f2e0b0);border:2px solid #8a5a2b;border-radius:10px;padding:16px;margin-bottom:16px;box-shadow:0 8px 18px #2a160a88,inset 0 0 0 3px #fff6dc}
+.card h3{margin:0 0 8px;font:400 25px var(--head);color:var(--red)}
+input[type=text],input[type=number],textarea{width:100%;padding:13px 14px;border-radius:8px;border:2px solid #8a5a2b;background:#fffaea;color:var(--ink);font:700 17px var(--sans);margin-bottom:10px}
+.btn{display:block;width:100%;padding:14px;border:2px solid #7a4f14;border-radius:10px;font:800 16px var(--sans);letter-spacing:.5px;color:#2a1608;cursor:pointer;background:linear-gradient(#ffe69a,#f0bb4a 55%,#c98a25);box-shadow:0 4px 0 #7a4f14,0 10px 16px #2a160a77,inset 0 1px 0 #fffa}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #7a4f14}
+.btn.ghost{background:linear-gradient(#7d5230,#5e3a1e);color:#fff1c6;border-color:#3a2412;margin-top:8px;box-shadow:0 3px 0 #2a160a,0 8px 12px #2a160a77}
+.opt{display:block;width:100%;text-align:left;padding:13px 14px;margin-bottom:9px;border-radius:8px;border:2px solid #a07442;background:#fffaea;color:var(--ink);font:700 16px var(--sans);cursor:pointer;box-shadow:0 3px 0 #a0744255}
+.opt:active{background:#f6dd9a}
+.msg{min-height:22px;text-align:center;font:700 15px var(--sans);margin:6px 0 4px;color:#fbeec9}
+.card .msg{color:var(--red)}
+.codebox{display:none;text-align:center;border-radius:26px 30px 24px 32px;padding:18px 16px;margin-top:12px;color:#fff;background:radial-gradient(circle at 35% 28%,#e0554e,#a32424 58%,#640f0f);border:3px solid #4d0b0b;box-shadow:0 0 0 5px #a3231f55,0 12px 24px #2a160a99}
+.codebox.show{display:block}
+.cl{font:800 11px var(--sans);letter-spacing:4px;color:#ffe2b0}
+.cv{font:400 40px var(--head);letter-spacing:4px;margin:8px 0;color:#fff;text-shadow:0 3px 0 #4d0b0b}
+.cs{font-size:14px;opacity:.95;margin-bottom:12px}
+.codebox .btn{border-color:#4d0b0b}
+.err{text-align:center;font-size:13px;opacity:.75;margin-top:12px}
+.shake{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.mono{font:700 22px/1.9 ui-monospace,Menlo,Consolas,monospace;letter-spacing:3px;text-align:center;word-break:break-word;color:#2a1608}
+.scroll-x{overflow-x:auto;padding-bottom:6px}
+.tbl{display:grid;grid-auto-flow:column;grid-template-rows:auto auto;gap:3px;width:max-content}
+.tbl span{width:26px;text-align:center;font:700 15px var(--sans);padding:3px 0;border-radius:4px;background:#ead6a2}
+.tbl span.b{background:#8a5a2b;color:#fff1c6}
+.small{font-size:13px;opacity:.85;margin:0 0 8px}
+
+#board{display:grid;grid-template-columns:repeat(8,1fr);width:100%;max-width:416px;margin:0 auto 10px;aspect-ratio:1;border:6px solid #5e3a1e;border-radius:4px;overflow:hidden;box-shadow:0 10px 24px #2a160a99,inset 0 0 0 2px #f0c14f}
+.sq{position:relative;display:flex;align-items:center;justify-content:center;aspect-ratio:1;cursor:pointer;user-select:none}
+.sq.lt{background:#f3dca8}.sq.dk{background:#9a6633}
+.sq.last{box-shadow:inset 0 0 0 100px #c9302c55}.sq.sel{box-shadow:inset 0 0 0 3px #f0c14f,inset 0 0 0 100px #f0c14f66}
+.sq.tg::after{content:"";position:absolute;width:30%;height:30%;border-radius:50%;background:#a3231fcc;box-shadow:0 0 8px #a3231f}
+.pc{font-size:min(9vw,40px);line-height:1}
+.pc.w{color:#fffaf0;text-shadow:0 0 2px #1b0f08,0 0 3px #1b0f08,0 2px 4px #0008}
+.pc.b{color:#1b0f08;text-shadow:0 0 2px #fff6}
+</style></head><body><div class="wrap"><div class="skulls">☠ ⚓ ☠</div><div class="chap">ГЛАВА 2</div><h1>Призрак капитана</h1><p class="story">За шахматной доской сидит призрак капитана Двадцать Два. «Поставь мне мат в два хода, и ключ твой».</p><div class="card"><div id="board"></div><div class="msg" id="msg">Ход белых. Мат в два хода.</div>
+<button class="btn ghost" id="rs">Начать заново</button><button class="btn ghost" id="hn">Подсказка (считается ошибкой)</button></div><div class="codebox" id="codebox"></div><div class="err" id="err">Ошибок: 0</div></div><script>
+const $=id=>document.getElementById(id);
+let err=0;
+function mistake(){err++;$("err").textContent="Ошибок: "+err}
+function shake(el){el.classList.remove("shake");void el.offsetWidth;el.classList.add("shake")}
+function norm(s){return String(s).toUpperCase().replace(/Ё/g,"Е").replace(/[^А-ЯA-Z0-9]/g,"")}
+function finish(base){const c=base+(err===0?"!":"");const b=$("codebox");
+ b.innerHTML='<div class="cl">🗝️ СЛОВО-ПОДСКАЗКА</div><div class="cv">'+c+'</div><div class="cs">'+(err===0?"Идеально: без ошибок ✨ Впиши это слово боту в чат.":"Впиши это слово боту в чат.")+'</div><button class="btn" id="cp">Скопировать код</button>';
+ b.classList.add("show");$("cp").onclick=()=>{try{navigator.clipboard.writeText(c);$("cp").textContent="Скопировано ✓"}catch(e){}};
+ setTimeout(()=>b.scrollIntoView({behavior:"smooth",block:"center"}),150)}
+/* Мини-шахматный движок: без рокировок и взятия на проходе; пешка превращается в ферзя */
+const Chess=(()=>{
+const N=[[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]],K=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+const D={r:[[1,0],[-1,0],[0,1],[0,-1]],b:[[1,1],[1,-1],[-1,1],[-1,-1]]};
+const isW=p=>p!=="."&&p===p.toUpperCase();
+const side=(p)=>p==="."?null:(isW(p)?"w":"b");
+function pseudo(b,s){const out=[];
+ for(let i=0;i<64;i++){const p=b[i];if(p==="."||side(p)!==s)continue;const r=i>>3,f=i&7,t=p.toLowerCase();
+  const add=(r2,f2)=>{if(r2<0||r2>7||f2<0||f2>7)return false;const j=r2*8+f2,q=b[j];if(q!=="."&&side(q)===s)return false;out.push({from:i,to:j,cap:q!=="."});return q==="."};
+  if(t==="n")for(const[a,c]of N)add(r+a,f+c);
+  else if(t==="k")for(const[a,c]of K)add(r+a,f+c);
+  else if(t==="p"){const dir=s==="w"?-1:1,sr=s==="w"?6:1,r2=r+dir;
+   if(r2>=0&&r2<=7){if(b[r2*8+f]==="."){out.push({from:i,to:r2*8+f,promo:r2===0||r2===7});
+     if(r===sr&&b[(r2+dir)*8+f]===".")out.push({from:i,to:(r2+dir)*8+f})}
+    for(const df of[-1,1]){const f2=f+df;if(f2<0||f2>7)continue;const q=b[r2*8+f2];if(q!=="."&&side(q)!==s)out.push({from:i,to:r2*8+f2,cap:true,promo:r2===0||r2===7})}}}
+  else{const dirs=t==="r"?D.r:t==="b"?D.b:D.r.concat(D.b);
+   for(const[a,c]of dirs){let r2=r+a,f2=f+c;while(add(r2,f2)){r2+=a;f2+=c}}}}
+ return out}
+function find(b,s){const k=s==="w"?"K":"k";return b.indexOf(k)}
+function attacked(b,sq,by){const r=sq>>3,f=sq&7;
+ for(const[a,c]of N){const r2=r+a,f2=f+c;if(r2>=0&&r2<8&&f2>=0&&f2<8){const q=b[r2*8+f2];if(q===(by==="w"?"N":"n"))return true}}
+ for(const[a,c]of K){const r2=r+a,f2=f+c;if(r2>=0&&r2<8&&f2>=0&&f2<8){const q=b[r2*8+f2];if(q===(by==="w"?"K":"k"))return true}}
+ const pr=by==="w"?r+1:r-1;for(const df of[-1,1]){const f2=f+df;if(pr>=0&&pr<8&&f2>=0&&f2<8&&b[pr*8+f2]===(by==="w"?"P":"p"))return true}
+ for(const[dirs,ts]of[[D.r,"rq"],[D.b,"bq"]])for(const[a,c]of dirs){let r2=r+a,f2=c+f;while(r2>=0&&r2<8&&f2>=0&&f2<8){const q=b[r2*8+f2];if(q!=="."){if(side(q)===by&&ts.includes(q.toLowerCase()))return true;break}r2+=a;f2+=c}}
+ return false}
+const inCheck=(b,s)=>attacked(b,find(b,s),s==="w"?"b":"w");
+function make(b,m){const n=b.slice();let p=n[m.from];n[m.from]=".";if(m.promo)p=isW(p)?"Q":"q";n[m.to]=p;return n}
+function legal(b,s){return pseudo(b,s).filter(m=>!inCheck(make(b,m),s))}
+const opp=s=>s==="w"?"b":"w";
+const isMate=(b,s)=>inCheck(b,s)&&legal(b,s).length===0;
+function mateIn1(b,s){return legal(b,s).filter(m=>isMate(make(b,m),opp(s)))}
+/* ходы белых, ведущие к мату в 2 при любой защите */
+function keys(b){const res=[];for(const m of legal(b,"w")){const nb=make(b,m),rep=legal(nb,"b");if(!rep.length)continue;
+ let ok=true;for(const r of rep){if(!mateIn1(make(nb,r),"w").length){ok=false;break}}if(ok)res.push({m,defences:rep.length})}return res}
+function fromRows(rows){const b=[];for(const row of rows){for(const ch of row)b.push(ch)}return b}
+return{pseudo,legal,make,inCheck,isMate,mateIn1,keys,opp,fromRows,side,isW};
+})();
+if(typeof module!=="undefined")module.exports=Chess;
+
+const START_ROWS=["...R.qk.",".....ppp","........",".......R","......Q.","........","...BNPPP","......K."];
+const B0=Chess.fromRows(START_ROWS),KEYS=Chess.keys(B0).map(k=>k.m);
+let board=B0.slice(),phase=0,sel=null,targets=[],locked=false,last=[-1,-1],used=false;
+const GL={k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"};
+function say(t){$("msg").textContent=t}
+function render(){const el=$("board");el.innerHTML="";for(let i=0;i<64;i++){const d=document.createElement("div"),r=i>>3,f=i&7;d.className="sq "+((r+f)%2?"dk":"lt")+(sel===i?" sel":"")+(last.includes(i)?" last":"")+(targets.includes(i)?" tg":"");
+ const p=board[i];if(p!=="."){const s=document.createElement("span");s.className="pc "+(p===p.toUpperCase()?"w":"b");s.textContent=GL[p.toLowerCase()]+"\uFE0E";d.appendChild(s)}
+ d.onclick=()=>click(i);el.appendChild(d)}}
+function click(i){if(locked)return;
+ if(sel!==null&&targets.includes(i)){const m=Chess.legal(board,"w").find(x=>x.from===sel&&x.to===i);sel=null;targets=[];play(m);return}
+ const p=board[i];if(p!=="."&&p===p.toUpperCase()){sel=i;targets=Chess.legal(board,"w").filter(x=>x.from===i).map(x=>x.to)}else{sel=null;targets=[]}render()}
+function play(m){const nb=Chess.make(board,m);
+ if(phase===0){last=[m.from,m.to];
+  if(KEYS.some(k=>k.from===m.from&&k.to===m.to)){board=nb;render();locked=true;say("Ход принят. Призрак думает…");
+   setTimeout(()=>{const reps=Chess.legal(board,"b"),r=reps[Math.floor(reps.length/2)];board=Chess.make(board,r);last=[r.from,r.to];phase=1;locked=false;render();say("Призрак ответил. Теперь поставь мат!")},900)}
+  else{board=nb;render();locked=true;mistake();say("Нет, такой ход не ведёт к мату в два хода. Начнём заново.");setTimeout(()=>{board=B0.slice();last=[-1,-1];locked=false;render()},1500)}}
+ else{if(Chess.isMate(nb,"b")){board=nb;last=[m.from,m.to];render();locked=true;say("Мат! Призрак сдаётся и протягивает ключ.");finish("ШАХ")}else{mistake();shake($("board"));say("Это не мат. Подумай ещё.");render()}}}
+$("rs").onclick=()=>{if(locked&&phase===1)return;board=B0.slice();phase=0;sel=null;targets=[];last=[-1,-1];locked=false;render();say("Ход белых. Мат в два хода.")};
+$("hn").onclick=()=>{if(used)return;used=true;mistake();say("Подсказка: чёрный ферзь связан ладьёй d8, а пешка g7 связана ферзём g4. Что ещё давит на g7?");$("hn").disabled=true};
+render();
+</script></body></html>

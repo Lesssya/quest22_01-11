@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Бутылка с посланием</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ruslan+Display&family=Marck+Script&family=Manrope:wght@500;700;800&display=swap"><style>
+:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--gold:#f0c14f;--ink:#3a2412;--red:#a3231f;--head:"Ruslan Display","Playfair Display",Georgia,serif;--serif:"Marck Script","Segoe Script","Brush Script MT",cursive;--sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;font-family:var(--sans);color:#fbeec9;background:linear-gradient(#00000030,transparent 30%,#00000040),repeating-linear-gradient(90deg,#6a4426 0 92px,#583720 92px 94px)}
+.wrap{max-width:520px;margin:0 auto;padding:22px 16px 56px}
+.skulls{text-align:center;font-size:18px;letter-spacing:10px;opacity:.8;margin-bottom:4px}
+.chap{font:800 12px var(--sans);letter-spacing:5px;color:var(--gold);text-align:center}
+h1{margin:8px 0 12px;text-align:center;font:400 38px/1.05 var(--head);color:#fff1c6;text-shadow:0 3px 0 #3a2412}
+.story{font:400 21px/1.35 var(--serif);text-align:center;color:#fbeec9;margin:0 0 20px;text-shadow:0 2px 2px #3a241288}
+.card{position:relative;color:var(--ink);background:linear-gradient(#fbf1d2,#f2e0b0);border:2px solid #8a5a2b;border-radius:10px;padding:16px;margin-bottom:16px;box-shadow:0 8px 18px #2a160a88,inset 0 0 0 3px #fff6dc}
+.card h3{margin:0 0 8px;font:400 25px var(--head);color:var(--red)}
+input[type=text],input[type=number],textarea{width:100%;padding:13px 14px;border-radius:8px;border:2px solid #8a5a2b;background:#fffaea;color:var(--ink);font:700 17px var(--sans);margin-bottom:10px}
+.btn{display:block;width:100%;padding:14px;border:2px solid #7a4f14;border-radius:10px;font:800 16px var(--sans);letter-spacing:.5px;color:#2a1608;cursor:pointer;background:linear-gradient(#ffe69a,#f0bb4a 55%,#c98a25);box-shadow:0 4px 0 #7a4f14,0 10px 16px #2a160a77,inset 0 1px 0 #fffa}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #7a4f14}
+.btn.ghost{background:linear-gradient(#7d5230,#5e3a1e);color:#fff1c6;border-color:#3a2412;margin-top:8px;box-shadow:0 3px 0 #2a160a,0 8px 12px #2a160a77}
+.opt{display:block;width:100%;text-align:left;padding:13px 14px;margin-bottom:9px;border-radius:8px;border:2px solid #a07442;background:#fffaea;color:var(--ink);font:700 16px var(--sans);cursor:pointer;box-shadow:0 3px 0 #a0744255}
+.opt:active{background:#f6dd9a}
+.msg{min-height:22px;text-align:center;font:700 15px var(--sans);margin:6px 0 4px;color:#fbeec9}
+.card .msg{color:var(--red)}
+.codebox{display:none;text-align:center;border-radius:26px 30px 24px 32px;padding:18px 16px;margin-top:12px;color:#fff;background:radial-gradient(circle at 35% 28%,#e0554e,#a32424 58%,#640f0f);border:3px solid #4d0b0b;box-shadow:0 0 0 5px #a3231f55,0 12px 24px #2a160a99}
+.codebox.show{display:block}
+.cl{font:800 11px var(--sans);letter-spacing:4px;color:#ffe2b0}
+.cv{font:400 40px var(--head);letter-spacing:4px;margin:8px 0;color:#fff;text-shadow:0 3px 0 #4d0b0b}
+.cs{font-size:14px;opacity:.95;margin-bottom:12px}
+.codebox .btn{border-color:#4d0b0b}
+.err{text-align:center;font-size:13px;opacity:.75;margin-top:12px}
+.shake{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.mono{font:700 22px/1.9 ui-monospace,Menlo,Consolas,monospace;letter-spacing:3px;text-align:center;word-break:break-word;color:#2a1608}
+.scroll-x{overflow-x:auto;padding-bottom:6px}
+.tbl{display:grid;grid-auto-flow:column;grid-template-rows:auto auto;gap:3px;width:max-content}
+.tbl span{width:26px;text-align:center;font:700 15px var(--sans);padding:3px 0;border-radius:4px;background:#ead6a2}
+.tbl span.b{background:#8a5a2b;color:#fff1c6}
+.small{font-size:13px;opacity:.85;margin:0 0 8px}
+</style></head><body><div class="wrap"><div class="skulls">☠ ⚓ ☠</div><div class="chap">ГЛАВА 1</div><h1>Бутылка с посланием</h1><p class="story">К берегу прибило бутылку. Внутри письмо, но слова в нём спутаны шифром.</p><div class="card"><h3>Письмо из бутылки</h3><div class="mono" id="ci">АХЕЮЗХГ ЪЖБЮ ЗР МЮЗХЪНС ТЗД ЭГХМЮЗ ЗР ИЬЪ ЕДЩЁДЖ ЖАХЬЮ ЕДЁЗДЧДВИ ЖЗЁХЬИ ЖБДЧД ФАДЁС Ю ДГ ЕИЖЗЮЗ ЗЪЦФ ГХ ЕЁЮМХБ</div></div>
+<div class="card"><h3>Диск шифровальщика</h3><p class="small">Капитан сдвигал буквы на число своих лет. Введи сдвиг: нижняя строка покажет, во что превратилась каждая буква верхней.</p>
+<input type="number" id="sh" min="0" max="32" value="0" inputmode="numeric"><div class="scroll-x"><div class="tbl" id="tb"></div></div></div>
+<div class="card"><h3>Что нужно сказать стражу?</h3><input type="text" id="ans" placeholder="Одно слово" autocomplete="off"><button class="btn" id="go">Проверить</button><div class="msg" id="msg"></div></div>
+<div style="text-align:center;margin-top:20px;opacity:.35;font-size:26px;cursor:pointer" id="sk">🏴‍☠️</div><div class="msg" id="egg"></div><div class="codebox" id="codebox"></div><div class="err" id="err">Ошибок: 0</div></div><script>
+const $=id=>document.getElementById(id);
+let err=0;
+function mistake(){err++;$("err").textContent="Ошибок: "+err}
+function shake(el){el.classList.remove("shake");void el.offsetWidth;el.classList.add("shake")}
+function norm(s){return String(s).toUpperCase().replace(/Ё/g,"Е").replace(/[^А-ЯA-Z0-9]/g,"")}
+function finish(base){const c=base+(err===0?"!":"");const b=$("codebox");
+ b.innerHTML='<div class="cl">🗝️ СЛОВО-ПОДСКАЗКА</div><div class="cv">'+c+'</div><div class="cs">'+(err===0?"Идеально: без ошибок ✨ Впиши это слово боту в чат.":"Впиши это слово боту в чат.")+'</div><button class="btn" id="cp">Скопировать код</button>';
+ b.classList.add("show");$("cp").onclick=()=>{try{navigator.clipboard.writeText(c);$("cp").textContent="Скопировано ✓"}catch(e){}};
+ setTimeout(()=>b.scrollIntoView({behavior:"smooth",block:"center"}),150)}
+
+const A="АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+function tbl(){const s=((+$("sh").value||0)%33+33)%33;let h="";for(const[i,c]of[...A].entries())h+=`<span class="b">${c}</span>`+`<span>${A[(i+s)%33]}</span>`;$("tb").innerHTML=h}
+$("sh").oninput=tbl;tbl();
+$("go").onclick=()=>{if(norm($("ans").value)==="ЯКОРЬ"){$("msg").textContent="Страж кивает и открывает ворота!";$("go").disabled=true;finish("ЯКОРЬ")}else{mistake();shake($("ans"));$("msg").textContent="Страж хмурится. Это не то слово."}};
+let sk=0;$("sk").onclick=()=>{sk++;if(sk>=5)$("egg").textContent="Шепни боту тайный пароль: ЙОХОХО"};
+</script></body></html>
