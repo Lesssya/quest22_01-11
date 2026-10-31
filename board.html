@@ -101,6 +101,10 @@ background:linear-gradient(#ffeeb5,#f4b940 60%,#d9962b);box-shadow:0 6px 0 #9b65
 .msg.solo .media{flex:1;min-height:0;width:100%;margin:0;justify-content:center}
 .msg.solo .shot{padding:3px}
 .msg.solo .shot img{max-width:100%;max-height:min(62vh,560px)}
+@media (max-width:720px){
+ .cw.photo{width:min(300px,84vw);height:min(460px,66dvh)}
+ .msg.solo .shot img{max-height:min(38dvh,300px)}
+}
 .msg.note{display:flex;align-items:center}
 .msg.note .media{width:100%;margin:0}
 .voice{display:block;width:100%;max-width:100%;align-self:stretch;box-sizing:border-box;margin:0;padding:0;border:1px solid #e6cf8659;border-radius:999px;background:#0c082299;box-shadow:0 6px 14px #0000002e;color:#fff;cursor:pointer;font:600 12px var(--sans);appearance:none;-webkit-appearance:none;text-align:left}
@@ -153,7 +157,7 @@ background:linear-gradient(#ffeeb5,#f4b940 60%,#d9962b);box-shadow:0 6px 0 #9b65
 <script>
 /* ===== НАСТРОЙКИ ===== */
 const START=14;                       /* алмазы по умолчанию, если в ссылке нет ?d=число */
-const COST=1;                         /* цена одного желания */
+const COST=1;                         /* цена обычного желания; главная карта забирает всё, что осталось */
 const FINAL="Все желания исполнены. Твоя награда ждёт тебя лично 🎁";
 /* пожелания лежат в wishes-data.js. Главная карта Олеси (gold) всегда последняя. */
 function esc(s){return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
@@ -200,11 +204,13 @@ const p=new URLSearchParams(location.search);let start=START;if(p.has("d")&&!isN
 function makeOrder(){const f=NOTES.map((n,i)=>i).filter(i=>!NOTES[i].gold);for(let i=f.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[f[i],f[j]]=[f[j],f[i]]}return f.concat(NOTES.map((n,i)=>i).filter(i=>NOTES[i].gold))}
 let st={start,n:0,order:makeOrder()};
 try{const s=JSON.parse(localStorage.getItem("bdwish3")||"null");if(s&&s.start===start&&Array.isArray(s.order)&&s.order.length===NOTES.length)st=s}catch(e){}
-const save=()=>{try{localStorage.setItem("bdwish3",JSON.stringify(st))}catch(e){}},bal=()=>st.start-st.n*COST;
+const save=()=>{try{localStorage.setItem("bdwish3",JSON.stringify(st))}catch(e){}},bal=()=>st.n>=NOTES.length?0:st.start-st.n*COST;
+function price(){return NOTES.length-st.n===1?Math.max(0,bal()):COST}
 let tt;function toast(t){const e=$("toast");e.textContent=t;e.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("show"),2800)}
 function draw(){const left=NOTES.length-st.n;
  $("bal").textContent=bal();$("cnt").textContent="Желаний: "+st.n+" / "+NOTES.length;
- const b=$("pull");b.disabled=left===0||bal()<COST;b.textContent=left===0?"Все желания исполнены":(bal()<COST?"Не хватает алмазов":"✦  Загадать желание · "+COST+" 💎");
+ const pay=price();
+ const b=$("pull");b.disabled=left===0||bal()<pay;b.textContent=left===0?"Все желания исполнены":(bal()<pay?"Не хватает алмазов":"✦  Загадать желание · "+pay+" 💎");
  $("bar").innerHTML=NOTES.map((n,i)=>`<div class="seg${i<st.n?" f":""}${i===NOTES.length-1?" g":""}"></div>`).join("");
  $("pity").textContent=left===0?"":(left>1?"До главной карты: "+(left-1):"Следующая карта будет главной ✨");
  const g=$("grid");g.innerHTML="";NOTES.forEach((n,k)=>{const open=st.order.indexOf(k)<st.n,d=document.createElement("div");
@@ -256,7 +262,7 @@ function view(k,anim){const n=NOTES[k],g=!!n.gold,ns=g?5:4,media=n.media||[],sol
   later(()=>{cw.classList.add("flip");ov.classList.add("flipped")},800);
   later(()=>cw.classList.add("showface"),1250);
   later(()=>cl.classList.add("show"),2600)})}
-$("pull").onclick=()=>{if(st.n>=NOTES.length||bal()<COST)return;
+$("pull").onclick=()=>{const pay=price();if(st.n>=NOTES.length||bal()<pay)return;
  const k=st.order[st.n];st.n++;save();$("pull").disabled=true;$("em").classList.add("charge");
  setTimeout(()=>{$("em").classList.remove("charge");view(k,true);
   if(st.n===1)later(()=>toast("🏆 Ачивка разблокирована: Первое желание"),3300);
