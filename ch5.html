@@ -45,9 +45,9 @@ function finish(base){const c=base+(err===0?"!":"");const b=$("codebox");
  setTimeout(()=>b.scrollIntoView({behavior:"smooth",block:"center"}),150)}
 
 /* ===== НАСТРОЙКИ: личный вопрос про вас двоих ===== */
-const QUESTION="ВПИШИ СЮДА ВОПРОС, ответ на который знаете только вы двое";
-const ANSWERS=[];                 /* например ["кино","в кино"]. Пусто = подойдёт любой ответ из 3+ букв */
-const HINT="Подсказка: вспомни наш общий момент";
+const QUESTION="Какой вопрос мы задаем друг другу постоянно в качестве шутки (а может быть и не шутки хехе)?";
+const ANSWERS=["давай встречаться","го встречаться"];
+const HINT="Подсказка: как вы это обычно пишете друг другу";
 /* ================================================== */
 $("qq").textContent=QUESTION;$("hh").textContent=HINT;
 $("go").onclick=()=>{const v=norm($("ans").value),ok=ANSWERS.length?ANSWERS.some(a=>norm(a)===v):v.length>=3;
