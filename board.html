@@ -80,14 +80,39 @@ background:linear-gradient(#ffeeb5,#f4b940 60%,#d9962b);box-shadow:0 6px 0 #9b65
 @keyframes si{from{opacity:0;transform:scale(2.4) rotate(-90deg)}to{opacity:1;transform:none}}
 .from{font:700 30px/1.1 var(--serif);margin:10px 0 6px}
 .orn{font-size:13px;opacity:.7;letter-spacing:6px;margin-bottom:10px}
-.msg{flex:1;overflow:auto;padding:0 2px 8px;text-align:left}
+.msg{flex:1;overflow:auto;min-height:0;padding:0 2px 8px;text-align:left;scrollbar-width:thin;scrollbar-color:#e6cf8644 transparent}
+.msg::-webkit-scrollbar{width:4px}
+.msg::-webkit-scrollbar-thumb{background:#e6cf8655;border-radius:4px}
 .msg .letter{white-space:pre-wrap;font:600 16px/1.45 var(--sans)}
 .msg .letter img.emoji{height:1.15em;width:1.15em;margin:0 .05em;vertical-align:-.15em;display:inline}
-.msg img,.msg video{width:100%;max-height:240px;object-fit:contain;border-radius:12px;margin-top:12px;display:block;background:#00000022}
+.media{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:14px;width:100%}
+.shot{position:relative;width:max-content;max-width:100%;margin:0;padding:3px;border-radius:14px;background:transparent;border:1px solid #e6cf8670;box-shadow:0 8px 16px #00000024}
+.shot img,.shot video{width:auto;height:auto;max-width:100%;max-height:min(46vh,360px);border-radius:11px;display:block;margin:0;background:transparent}
+.shot video:not(.ready){position:absolute;width:0;height:0;overflow:hidden}
+.shot:has(video:not(.ready)){padding:0;border-color:transparent;box-shadow:none}
+.shot:has(video:not(.ready)) .play{visibility:hidden}
+.shot img{cursor:zoom-in}
+.play{position:absolute;left:50%;top:50%;translate:-50% -50%;width:34px;height:34px;padding:0;border-radius:50%;border:1px solid #fff6;background:linear-gradient(#ffe9b0,#e6b24a);box-shadow:0 4px 10px #0005;cursor:pointer}
+.play::before{content:"";display:block;width:0;height:0;margin-left:13px;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent #3d2700}
 .cw.photo{width:min(440px,94vw);height:min(760px,90vh)}
-.msg.solo{display:flex;align-items:center;overflow:hidden}
-.msg.solo img{width:100%;height:100%;max-height:none;margin:0;object-fit:contain}
-.msg audio{width:100%;margin-top:12px}
+.msg.solo{display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.msg.solo .media{flex:1;min-height:0;width:100%;margin:0;justify-content:center}
+.msg.solo .shot{padding:3px}
+.msg.solo .shot img{max-width:100%;max-height:min(62vh,560px)}
+.msg.note{display:flex;align-items:center}
+.msg.note .media{width:100%;margin:0}
+.voice{display:flex;align-items:center;gap:10px;width:100%;margin:0;padding:7px 12px 7px 7px;border:1px solid #e6cf8659;border-radius:999px;background:#0c082299;box-shadow:0 6px 14px #0000002e;color:#fff;cursor:pointer;font:600 12px var(--sans)}
+.voice audio{display:none}
+.vbtn{position:relative;width:30px;height:30px;flex:none;border-radius:50%;background:linear-gradient(#ffe9b0,#e6b24a);box-shadow:inset 0 1px 0 #fff7}
+.vbtn::before{content:"";position:absolute;left:11px;top:9px;border-style:solid;border-width:6px 0 6px 8px;border-color:transparent transparent transparent #3d2700}
+.voice.on .vbtn::before{left:10px;top:8px;width:10px;height:14px;border:0;background:linear-gradient(#3d2700,#3d2700) 0 0/3px 100% no-repeat,linear-gradient(#3d2700,#3d2700) 7px 0/3px 100% no-repeat}
+.vwave{flex:1;display:flex;align-items:center;gap:2px;height:16px;min-width:0}
+.vwave i{display:block;width:2px;height:var(--h);border-radius:2px;background:#ffffff2e}
+.vwave i.on{background:#e6cf86}
+.vtime{min-width:32px;text-align:right;color:#ffd36bb3;font-variant-numeric:tabular-nums}
+.zoom{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;padding:22px;background:#04030eeb;cursor:zoom-out}
+.zoom.show{display:flex}
+.zoom img{max-width:100%;max-height:100%;object-fit:contain;border-radius:16px;border:1px solid #e6cf8666;box-shadow:0 16px 40px #000a}
 .r4{--c1:#1a1050;--c2:#5a3fd6;--c3:#b9a4ff;--fr:#e6cf86;--gl:#7b5cf0cc;--tx:#fff;--st:#ffd36b}
 .r5{--c1:#b9701a;--c2:#f6b93e;--c3:#fff3c4;--fr:#fff4c8;--gl:#ffc83dcc;--tx:#3d2700;--st:#fff}
 .close{position:relative;z-index:6;margin-top:22px;padding:12px 34px;border:1px solid #ffffff55;border-radius:99px;background:#ffffff18;color:#fff;font:800 15px var(--sans);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .5s}
@@ -120,6 +145,7 @@ background:linear-gradient(#ffeeb5,#f4b940 60%,#d9962b);box-shadow:0 6px 0 #9b65
   <div class="stage"><div class="cw" id="cw"><div class="face back" id="bk"><i>✦</i></div><div class="face front" id="front"></div></div></div>
   <button class="close" id="close">Закрыть</button></div>
 <div class="toast" id="toast"></div>
+<div class="zoom" id="zoom"><img alt=""></div>
 <script src="wishes-data.js"></script>
 <script>
 /* ===== НАСТРОЙКИ ===== */
@@ -174,13 +200,39 @@ function draw(){const left=NOTES.length-st.n;
   if(open){d.innerHTML=`<div class="st">${n.gold?"★★★★★":"★★★★"}</div>${n.from}`;d.onclick=()=>view(k,false)}else d.textContent=n.gold?"★":"?";g.appendChild(d)});
  $("fin").textContent=FINAL;$("fin").classList.toggle("show",left===0)}
 const cw=$("cw"),ov=$("ov"),cl=$("close"),T=[];const later=(f,ms)=>T.push(setTimeout(f,ms));
-function view(k,anim){const n=NOTES[k],g=!!n.gold,ns=g?5:4,solo=!n.text&&(n.media||[]).some(m=>m.type==="img");T.forEach(clearTimeout);T.length=0;
+const BARS=[7,12,16,9,18,11,14,8,17,10,15,6,13,18,9,12,16,8,14,11];
+function stopMedia(except){document.querySelectorAll("video,audio").forEach(el=>{if(el!==except){try{el.pause()}catch(e){}}});
+ document.querySelectorAll(".voice.on").forEach(el=>{if(!(except&&el.contains(except)))el.classList.remove("on")})}
+function openShot(src){const z=$("zoom"),im=z.querySelector("img");im.src=src;z.classList.add("show")}
+function voiceEl(src){const a=document.createElement("audio");a.src=src;a.preload="metadata";
+ const b=document.createElement("button");b.type="button";b.className="voice";
+ b.innerHTML=`<span class="vbtn"></span><span class="vwave">${BARS.map((h,i)=>`<i style="--h:${h}px"></i>`).join("")}</span><span class="vtime">0:00</span>`;
+ const time=b.querySelector(".vtime"),bars=[...b.querySelectorAll("i")];
+ const fmt=s=>!isFinite(s)||s<0?"0:00":Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
+ a.onloadedmetadata=()=>{if(a.paused&&!a.currentTime)time.textContent=fmt(a.duration)};
+ a.ontimeupdate=()=>{time.textContent=fmt(a.currentTime||0);const p=a.duration?a.currentTime/a.duration:0;bars.forEach((el,i)=>el.classList.toggle("on",(i+1)/bars.length<=p))};
+ a.onended=()=>{b.classList.remove("on");time.textContent=fmt(a.duration)};
+ b.onclick=()=>{if(a.paused){stopMedia(a);a.play();b.classList.add("on")}else{a.pause();b.classList.remove("on")}};
+ b.appendChild(a);return b}
+function mountMedia(msg,list){if(!list.length)return;const box=document.createElement("div");box.className="media";
+ list.forEach(m=>{if(m.type==="img"){const f=document.createElement("figure"),img=document.createElement("img");
+  f.className="shot";img.src=m.src;img.alt="";img.onclick=()=>openShot(m.src);f.appendChild(img);box.appendChild(f)}
+ else if(m.type==="video"){const f=document.createElement("figure"),v=document.createElement("video"),play=document.createElement("button");
+  f.className="shot";v.src=m.src;v.preload="metadata";v.setAttribute("playsinline","");v.controls=false;
+  v.onloadedmetadata=()=>{const w=v.videoWidth,h=v.videoHeight,box=f.parentElement;if(w&&h){const maxW=box.clientWidth||280,maxH=Math.min(innerHeight*.46,360),s=Math.min(maxW/w,maxH/h,1);v.style.width=Math.round(w*s)+"px";v.style.height=Math.round(h*s)+"px"}v.classList.add("ready")};
+  v.onerror=()=>v.classList.add("ready");
+  play.type="button";play.className="play";play.setAttribute("aria-label","Смотреть");
+  const start=()=>{if(v.controls)return;stopMedia(v);v.controls=true;play.remove();v.play()};
+  play.onclick=e=>{e.stopPropagation();start()};v.onclick=start;v.onplay=()=>stopMedia(v);
+  f.appendChild(v);f.appendChild(play);box.appendChild(f)}
+ else box.appendChild(voiceEl(m.src))});msg.appendChild(box)}
+function view(k,anim){const n=NOTES[k],g=!!n.gold,ns=g?5:4,media=n.media||[],solo=!n.text&&media.some(m=>m.type==="img"),note=!n.text&&media.length&&media.every(m=>m.type==="audio");T.forEach(clearTimeout);T.length=0;
+ stopMedia();$("zoom").classList.remove("show");
  cw.className="cw "+(g?"r5":"r4")+(solo?" photo":"");$("bk").className="face back";$("front").className="face front";
  $("front").innerHTML=`<span class="cor a">✦</span><span class="cor b">✦</span><span class="cor c">✦</span><span class="cor d">✦</span><div class="stars">${Array.from({length:ns},(_,i)=>`<span style="--i:${i}">★</span>`).join("")}</div><div class="from">${n.from}</div><div class="orn">— ✦ —</div>`;
- const msg=document.createElement("div");msg.className="msg"+(solo?" solo":"");
+ const msg=document.createElement("div");msg.className="msg"+(solo?" solo":note?" note":"");
  if(n.text){const letter=document.createElement("div");letter.className="letter";letter.innerHTML=letterHtml(n);msg.appendChild(letter)}
- (n.media||[]).forEach(m=>{const el=m.type==="img"?document.createElement("img"):m.type==="video"?document.createElement("video"):document.createElement("audio");
-  el.src=m.src;if(m.type!=="img"){el.controls=true;el.setAttribute("playsinline","")}else el.alt="";msg.appendChild(el)});
+ mountMedia(msg,media);
  $("front").appendChild(msg);
  ov.classList.remove("boom","flipped");ov.classList.toggle("gold",g);cl.classList.remove("show");ov.classList.add("show");
  if(!anim){cw.classList.add("instant","in","flip");ov.classList.add("flipped");cl.classList.add("show");setTimeout(()=>cw.classList.remove("instant"),50);return}
@@ -193,6 +245,7 @@ $("pull").onclick=()=>{if(st.n>=NOTES.length||bal()<COST)return;
  setTimeout(()=>{$("em").classList.remove("charge");view(k,true);
   if(st.n===1)later(()=>toast("🏆 Ачивка разблокирована: Первое желание"),3300);
   if(NOTES[k].gold)later(()=>toast("🏆 Платина: Главная карта"),3300)},650)};
-cl.onclick=()=>{ov.classList.remove("show","boom","flipped");fxId++;fx.getContext("2d").clearRect(0,0,innerWidth,innerHeight);draw()};
+cl.onclick=()=>{stopMedia();$("zoom").classList.remove("show");ov.classList.remove("show","boom","flipped");fxId++;fx.getContext("2d").clearRect(0,0,innerWidth,innerHeight);draw()};
+$("zoom").onclick=()=>$("zoom").classList.remove("show");
 draw();
 </script></body></html>
