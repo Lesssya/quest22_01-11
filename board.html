@@ -86,7 +86,8 @@ background:linear-gradient(#ffeeb5,#f4b940 60%,#d9962b);box-shadow:0 6px 0 #9b65
 .msg::-webkit-scrollbar{width:4px}
 .msg::-webkit-scrollbar-thumb{background:#e6cf8655;border-radius:4px}
 .msg .letter{white-space:pre-wrap;font:600 16px/1.45 var(--sans)}
-.msg .letter img.emoji{height:1.15em;width:1.15em;margin:0 .05em;vertical-align:-.15em;display:inline}
+.msg .letter img.emoji{height:1.15em;width:1.15em;margin:0 .05em;vertical-align:-.15em;display:inline-block}
+.msg .letter span.emoji{font-size:1.15em;line-height:1;vertical-align:-.1em}
 .media{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:14px;width:100%}
 .shot{position:relative;width:max-content;max-width:100%;margin:0;padding:3px;border-radius:14px;background:transparent;border:1px solid #e6cf8670;box-shadow:0 8px 16px #00000024}
 .shot img,.shot video{width:auto;height:auto;max-width:100%;max-height:min(46vh,360px);border-radius:11px;display:block;margin:0;background:transparent}
@@ -161,9 +162,10 @@ const COST=1;                         /* цена обычного желани�
 const FINAL="Все желания исполнены. Твоя награда ждёт тебя лично 🎁";
 /* пожелания лежат в wishes-data.js. Главная карта Олеси (gold) всегда последняя. */
 function esc(s){return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+function emojiFallback(img){const s=document.createElement("span");s.className="emoji";s.textContent=img.alt;img.replaceWith(s)}
 function apple(s){let o="";const seg=new Intl.Segmenter(undefined,{granularity:"grapheme"});
- for(const {segment} of seg.segment(s)){if(/\p{Extended_Pictographic}/u.test(segment)){const hex=[...segment].map(ch=>ch.codePointAt(0)).filter(cp=>cp!==0xfe0f&&cp!==0xfe0e).map(cp=>cp.toString(16)).join("-");
-  o+=`<img class="emoji" alt="${esc(segment)}" src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple@15.1.2/img/apple/64/${hex}.png">`}else o+=esc(segment)}return o}
+ for(const {segment} of seg.segment(s)){if(/\p{Extended_Pictographic}/u.test(segment)){const hex=[...segment].map(ch=>ch.codePointAt(0)).filter(cp=>cp!==0xfe0e).map(cp=>cp.toString(16)).join("-");
+  o+=`<img class="emoji" alt="${esc(segment).replace(/"/g,"&quot;")}" src="wishes/emoji/${hex}.png" onerror="emojiFallback(this)">`}else o+=esc(segment)}return o}
 function letterHtml(n){const t=n.text||"",mark="\n\nУ няшечки";if(n.from==="Ваня Варюхин"){const i=t.indexOf(mark);if(i>=0)return `<i>${apple(t.slice(0,i))}</i>${apple(t.slice(i))}`}return apple(t)}
 const $=id=>document.getElementById(id),DPR=Math.min(2,devicePixelRatio||1);
 (function(){let p="";for(let i=0;i<16;i++){const a=i*Math.PI/8-Math.PI/2,r=i%2?34:70;p+=(100+Math.cos(a)*r).toFixed(1)+","+(100+Math.sin(a)*r).toFixed(1)+" "}$("stp").setAttribute("points",p)})();
