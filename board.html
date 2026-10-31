@@ -229,28 +229,30 @@ function voiceEl(src){const a=document.createElement("audio");a.src=src;a.preloa
  a.onended=()=>{b.classList.remove("on");time.textContent=fmt(a.duration)};
  b.onclick=()=>{if(a.paused){stopMedia(a);a.play();b.classList.add("on")}else{a.pause();b.classList.remove("on")}};
  b.appendChild(a);return b}
-function mountMedia(msg,list){if(!list.length)return;const box=document.createElement("div");box.className="media";
+function mountMedia(msg,list,deferVideo){if(!list.length)return;const box=document.createElement("div");box.className="media";
  list.forEach(m=>{if(m.type==="img"){const f=document.createElement("figure"),img=document.createElement("img");
-  f.className="shot";img.src=m.src;img.alt="";img.decoding="async";if(box.childElementCount)img.loading="lazy";img.onclick=()=>openShot(m.src);f.appendChild(img);box.appendChild(f)}
+  f.className="shot";img.src=m.src;img.alt="";img.decoding="async";if(!box.childElementCount)img.fetchPriority="high";img.onclick=()=>openShot(m.src);f.appendChild(img);box.appendChild(f)}
  else if(m.type==="video"){const f=document.createElement("figure"),v=document.createElement("video"),play=document.createElement("button");
-  f.className="shot";v.src=m.src;v.preload="metadata";v.setAttribute("playsinline","");v.controls=false;
+  f.className="shot";if(deferVideo)v.dataset.src=m.src;else v.src=m.src;v.preload="metadata";v.setAttribute("playsinline","");v.controls=false;
   v.onloadedmetadata=()=>{const w=v.videoWidth,h=v.videoHeight,box=f.parentElement;if(w&&h){const maxW=box.clientWidth||280,maxH=Math.min(innerHeight*.46,360),s=Math.min(maxW/w,maxH/h,1);v.style.width=Math.round(w*s)+"px";v.style.height=Math.round(h*s)+"px"}v.classList.add("ready")};
   v.onerror=()=>v.classList.add("ready");
   play.type="button";play.className="play";play.setAttribute("aria-label","Смотреть");
-  const start=()=>{if(v.controls)return;stopMedia(v);v.controls=true;play.remove();v.play()};
+  const start=()=>{if(v.controls)return;if(!v.src&&v.dataset.src)v.src=v.dataset.src;stopMedia(v);v.controls=true;play.remove();v.play()};
   play.onclick=e=>{e.stopPropagation();start()};v.onclick=start;v.onplay=()=>stopMedia(v);
   f.appendChild(v);f.appendChild(play);box.appendChild(f)}
  else box.appendChild(voiceEl(m.src))});msg.appendChild(box)}
+function armVideos(root){root.querySelectorAll("video[data-src]").forEach(v=>{if(!v.src)v.src=v.dataset.src})}
 function view(k,anim){const n=NOTES[k],g=!!n.gold,ns=g?5:4,media=n.media||[],solo=!n.text&&media.filter(m=>m.type==="img").length===1,note=!n.text&&media.length&&media.every(m=>m.type==="audio");T.forEach(clearTimeout);T.length=0;
  stopMedia();$("zoom").classList.remove("show");
  cw.className="cw "+(g?"r5":"r4")+(solo?" photo":"");$("bk").className="face back";$("front").className="face front";
  $("front").innerHTML=`<span class="cor a">✦</span><span class="cor b">✦</span><span class="cor c">✦</span><span class="cor d">✦</span><div class="stars">${Array.from({length:ns},(_,i)=>`<span style="--i:${i}">★</span>`).join("")}</div><div class="from">${n.from}</div><div class="orn">— ✦ —</div>`;
  const msg=document.createElement("div");msg.className="msg"+(solo?" solo":note?" note":"");
  if(n.text){const letter=document.createElement("div");letter.className="letter";letter.innerHTML=letterHtml(n);msg.appendChild(letter)}
+ mountMedia(msg,media,!!anim);
  $("front").appendChild(msg);
  ov.classList.remove("boom","flipped");ov.classList.toggle("gold",g);cl.classList.remove("show");ov.classList.add("show");lockScroll();
- if(!anim){mountMedia(msg,media);cw.classList.add("instant","in","flip","showface");ov.classList.add("flipped");cl.classList.add("show");setTimeout(()=>cw.classList.remove("instant"),50);return}
- runFX(g?[255,211,107]:[160,130,255],g,()=>{mountMedia(msg,media);ov.classList.add("boom");cw.classList.add("in");try{navigator.vibrate&&navigator.vibrate([40,30,90])}catch(e){}
+ if(!anim){cw.classList.add("instant","in","flip","showface");ov.classList.add("flipped");cl.classList.add("show");setTimeout(()=>cw.classList.remove("instant"),50);return}
+ runFX(g?[255,211,107]:[160,130,255],g,()=>{armVideos(msg);ov.classList.add("boom");cw.classList.add("in");try{navigator.vibrate&&navigator.vibrate([40,30,90])}catch(e){}
   later(()=>{cw.classList.add("flip");ov.classList.add("flipped")},800);
   later(()=>cw.classList.add("showface"),1250);
   later(()=>cl.classList.add("show"),2600)})}
