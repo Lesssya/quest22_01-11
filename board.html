@@ -52,8 +52,9 @@ background:linear-gradient(#ffeeb5,#f4b940 60%,#d9962b);box-shadow:0 6px 0 #9b65
 .slot .st{font-size:11px;letter-spacing:2px;margin-bottom:5px}
 .fin{display:none;margin-top:24px;padding:18px;border-radius:16px;border:1px solid #ffd36b88;background:linear-gradient(#ffd36b22,#ffd36b0d);color:#ffd36b;font:700 21px var(--serif);box-shadow:0 0 30px #ffd36b33}
 .fin.show{display:block}
-.ov{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(circle at 50% 45%,#150f3bf2,#04030f);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s;padding:18px}
-.ov.show{opacity:1;visibility:visible}
+.ov{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(circle at 50% 45%,#150f3bf2,#04030f);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s,visibility 0s linear .35s;padding:18px}
+.ov.show{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .35s,visibility 0s}
+.ov:not(.show) .rays,.ov:not(.show) .front::after{animation:none}
 .ov canvas{z-index:4}
 .rays{position:absolute;left:50%;top:46%;width:170vmax;height:170vmax;margin:-85vmax 0 0 -85vmax;background:repeating-conic-gradient(#ffd36b30 0 5deg,transparent 5deg 15deg);-webkit-mask:radial-gradient(circle,#000,transparent 50%);mask:radial-gradient(circle,#000,transparent 50%);animation:spin 40s linear infinite;opacity:0;transition:opacity 1s}
 .ov.gold.flipped .rays{opacity:1}
@@ -217,7 +218,7 @@ function voiceEl(src){const a=document.createElement("audio");a.src=src;a.preloa
  b.appendChild(a);return b}
 function mountMedia(msg,list){if(!list.length)return;const box=document.createElement("div");box.className="media";
  list.forEach(m=>{if(m.type==="img"){const f=document.createElement("figure"),img=document.createElement("img");
-  f.className="shot";img.src=m.src;img.alt="";img.onclick=()=>openShot(m.src);f.appendChild(img);box.appendChild(f)}
+  f.className="shot";img.src=m.src;img.alt="";img.decoding="async";if(box.childElementCount)img.loading="lazy";img.onclick=()=>openShot(m.src);f.appendChild(img);box.appendChild(f)}
  else if(m.type==="video"){const f=document.createElement("figure"),v=document.createElement("video"),play=document.createElement("button");
   f.className="shot";v.src=m.src;v.preload="metadata";v.setAttribute("playsinline","");v.controls=false;
   v.onloadedmetadata=()=>{const w=v.videoWidth,h=v.videoHeight,box=f.parentElement;if(w&&h){const maxW=box.clientWidth||280,maxH=Math.min(innerHeight*.46,360),s=Math.min(maxW/w,maxH/h,1);v.style.width=Math.round(w*s)+"px";v.style.height=Math.round(h*s)+"px"}v.classList.add("ready")};
@@ -247,7 +248,9 @@ $("pull").onclick=()=>{if(st.n>=NOTES.length||bal()<COST)return;
  setTimeout(()=>{$("em").classList.remove("charge");view(k,true);
   if(st.n===1)later(()=>toast("🏆 Ачивка разблокирована: Первое желание"),3300);
   if(NOTES[k].gold)later(()=>toast("🏆 Платина: Главная карта"),3300)},650)};
-cl.onclick=()=>{stopMedia();$("zoom").classList.remove("show");ov.classList.remove("show","boom","flipped");fxId++;fx.getContext("2d").clearRect(0,0,innerWidth,innerHeight);draw()};
+function shut(){T.forEach(clearTimeout);T.length=0;stopMedia();$("zoom").classList.remove("show");$("front").replaceChildren();cw.className="cw";cl.classList.remove("show");ov.classList.remove("show","boom","flipped","gold");fxId++;fx.getContext("2d").clearRect(0,0,innerWidth,innerHeight);draw()}
+cl.onclick=e=>{e.stopPropagation();shut()};
+ov.addEventListener("click",e=>{if(e.target===ov&&cl.classList.contains("show"))shut()});
 $("zoom").onclick=()=>$("zoom").classList.remove("show");
 draw();
 </script></body></html>
