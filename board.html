@@ -69,7 +69,8 @@ background:linear-gradient(#ffeeb5,#f4b940 60%,#d9962b);box-shadow:0 6px 0 #9b65
 .back{transform:rotateY(180deg);background:radial-gradient(circle at 50% 50%,var(--c2),var(--c1) 70%);border:2px solid var(--fr);box-shadow:0 0 50px var(--gl);display:flex;align-items:center;justify-content:center}
 .back::before{content:"";position:absolute;inset:10px;border:1px solid #ffffff55;border-radius:15px}
 .back i{font-style:normal;font-size:96px;color:#fff;text-shadow:0 0 30px #fff,0 0 70px var(--fr)}
-.front{background:radial-gradient(circle at 50% 0%,var(--c3),transparent 65%),linear-gradient(165deg,var(--c2),var(--c1));border:2px solid var(--fr);box-shadow:0 0 60px var(--gl);padding:28px 22px 22px;text-align:center;display:flex;flex-direction:column;color:var(--tx)}
+.front{visibility:hidden;background:radial-gradient(circle at 50% 0%,var(--c3),transparent 65%),linear-gradient(165deg,var(--c2),var(--c1));border:2px solid var(--fr);box-shadow:0 0 60px var(--gl);padding:28px 22px 22px;text-align:center;display:flex;flex-direction:column;color:var(--tx)}
+.cw.showface .front{visibility:visible}
 .front::before{content:"";position:absolute;inset:9px;border:1px solid #ffffff55;border-radius:15px;pointer-events:none}
 .front::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,#ffffff55 50%,transparent 65%);background-size:250% 100%;mix-blend-mode:overlay;animation:fo 3.2s infinite;pointer-events:none}
 .cor{position:absolute;font-size:14px;opacity:.8}
@@ -235,10 +236,11 @@ function view(k,anim){const n=NOTES[k],g=!!n.gold,ns=g?5:4,media=n.media||[],sol
  mountMedia(msg,media);
  $("front").appendChild(msg);
  ov.classList.remove("boom","flipped");ov.classList.toggle("gold",g);cl.classList.remove("show");ov.classList.add("show");
- if(!anim){cw.classList.add("instant","in","flip");ov.classList.add("flipped");cl.classList.add("show");setTimeout(()=>cw.classList.remove("instant"),50);return}
+ if(!anim){cw.classList.add("instant","in","flip","showface");ov.classList.add("flipped");cl.classList.add("show");setTimeout(()=>cw.classList.remove("instant"),50);return}
  const TI=1400;runFX(g?[255,211,107]:[160,130,255],g,TI);
  later(()=>{ov.classList.add("boom");cw.classList.add("in");try{navigator.vibrate&&navigator.vibrate([40,30,90])}catch(e){}},TI);
  later(()=>{cw.classList.add("flip");ov.classList.add("flipped")},TI+800);
+ later(()=>cw.classList.add("showface"),TI+1250);
  later(()=>cl.classList.add("show"),TI+2600)}
 $("pull").onclick=()=>{if(st.n>=NOTES.length||bal()<COST)return;
  const k=st.order[st.n];st.n++;save();$("pull").disabled=true;$("em").classList.add("charge");
