@@ -227,7 +227,7 @@ function mountMedia(msg,list){if(!list.length)return;const box=document.createEl
   play.onclick=e=>{e.stopPropagation();start()};v.onclick=start;v.onplay=()=>stopMedia(v);
   f.appendChild(v);f.appendChild(play);box.appendChild(f)}
  else box.appendChild(voiceEl(m.src))});msg.appendChild(box)}
-function view(k,anim){const n=NOTES[k],g=!!n.gold,ns=g?5:4,media=n.media||[],solo=!n.text&&media.some(m=>m.type==="img"),note=!n.text&&media.length&&media.every(m=>m.type==="audio");T.forEach(clearTimeout);T.length=0;
+function view(k,anim){const n=NOTES[k],g=!!n.gold,ns=g?5:4,media=n.media||[],solo=!n.text&&media.filter(m=>m.type==="img").length===1,note=!n.text&&media.length&&media.every(m=>m.type==="audio");T.forEach(clearTimeout);T.length=0;
  stopMedia();$("zoom").classList.remove("show");
  cw.className="cw "+(g?"r5":"r4")+(solo?" photo":"");$("bk").className="face back";$("front").className="face front";
  $("front").innerHTML=`<span class="cor a">✦</span><span class="cor b">✦</span><span class="cor c">✦</span><span class="cor d">✦</span><div class="stars">${Array.from({length:ns},(_,i)=>`<span style="--i:${i}">★</span>`).join("")}</div><div class="from">${n.from}</div><div class="orn">— ✦ —</div>`;

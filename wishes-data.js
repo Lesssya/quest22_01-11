@@ -88,7 +88,20 @@ const NOTES = [
   {
     "from": "Олеся",
     "text": "",
-    "media": [],
+    "media": [
+      {"type": "img", "src": "wishes/olesya-1.jpg"},
+      {"type": "img", "src": "wishes/olesya-2.jpg"},
+      {"type": "img", "src": "wishes/olesya-3.jpg"},
+      {"type": "img", "src": "wishes/olesya-4.jpg"},
+      {"type": "img", "src": "wishes/olesya-5.jpg"},
+      {"type": "img", "src": "wishes/olesya-6.jpg"},
+      {"type": "img", "src": "wishes/olesya-7.jpg"},
+      {"type": "img", "src": "wishes/olesya-8.jpg"},
+      {"type": "img", "src": "wishes/olesya-9.jpg"},
+      {"type": "img", "src": "wishes/olesya-10.jpg"},
+      {"type": "img", "src": "wishes/olesya-11.jpg"},
+      {"type": "img", "src": "wishes/olesya-12.jpg"}
+    ],
     "gold": true
   },
   {
